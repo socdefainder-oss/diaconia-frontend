@@ -14,7 +14,7 @@ export default function NewCoursePage() {
     title: '',
     description: '',
     category: '',
-    level: 'iniciante',
+    level: 'iniciante' as 'iniciante' | 'intermediário' | 'avançado',
     lessons: [] as { title: string; description: string; videoUrl: string; duration: number }[],
   });
 
@@ -129,12 +129,12 @@ export default function NewCoursePage() {
                 <select
                   required
                   value={formData.level}
-                  onChange={(e) => setFormData({ ...formData, level: e.target.value })}
+                  onChange={(e) => setFormData({ ...formData, level: e.target.value as any })}
                   className="input"
                 >
                   <option value="iniciante">Iniciante</option>
-                  <option value="intermediario">Intermediário</option>
-                  <option value="avancado">Avançado</option>
+                  <option value="intermediário">Intermediário</option>
+                  <option value="avançado">Avançado</option>
                 </select>
               </div>
             </div>
