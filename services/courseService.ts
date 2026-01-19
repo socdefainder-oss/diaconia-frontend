@@ -3,10 +3,10 @@ import { Course, PaginatedResponse, ApiResponse } from '@/types';
 
 export const courseService = {
   async getCourses(page = 1, limit = 10): Promise<Course[]> {
-    const { data } = await api.get<Course[]>('/courses', {
+    const { data } = await api.get<any>('/courses', {
       params: { page, limit },
     });
-    return data;
+    return data.data || [];
   },
 
   async getCourse(id: string): Promise<Course> {
