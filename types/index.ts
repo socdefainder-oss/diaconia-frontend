@@ -58,14 +58,13 @@ export interface Announcement {
   _id: string;
   title: string;
   content: string;
-  author: User;
-  priority: 'low' | 'normal' | 'high' | 'urgent';
-  image?: string;
-  targetAudience: string[];
+  author: User | string;
+  priority: 'baixa' | 'media' | 'alta' | 'urgente';
+  attachments?: string[];
   isActive: boolean;
   isPinned: boolean;
-  expiresAt?: string;
-  viewedBy: string[];
+  viewedBy?: string[];
+  viewsCount?: number;
   createdAt: string;
 }
 
