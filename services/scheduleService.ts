@@ -2,8 +2,8 @@ import api from '@/lib/api';
 import { Schedule, PaginatedResponse, ApiResponse } from '@/types';
 
 export const scheduleService = {
-  async getSchedules(params?: { startDate?: string; endDate?: string; page?: number; limit?: number }): Promise<PaginatedResponse<Schedule>> {
-    const { data } = await api.get<PaginatedResponse<Schedule>>('/schedules', { params });
+  async getSchedules(params?: { startDate?: string; endDate?: string; page?: number; limit?: number }): Promise<Schedule[]> {
+    const { data } = await api.get<Schedule[]>('/schedules', { params });
     return data;
   },
 
