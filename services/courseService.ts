@@ -2,8 +2,8 @@ import api from '@/lib/api';
 import { Course, PaginatedResponse, ApiResponse } from '@/types';
 
 export const courseService = {
-  async getCourses(page = 1, limit = 10): Promise<PaginatedResponse<Course>> {
-    const { data } = await api.get<PaginatedResponse<Course>>('/courses', {
+  async getCourses(page = 1, limit = 10): Promise<Course[]> {
+    const { data } = await api.get<Course[]>('/courses', {
       params: { page, limit },
     });
     return data;
