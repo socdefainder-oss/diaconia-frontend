@@ -2,8 +2,8 @@ import api from '@/lib/api';
 import { User, PaginatedResponse, ApiResponse } from '@/types';
 
 export const userService = {
-  async getUsers(params?: { role?: string; search?: string; page?: number; limit?: number }): Promise<PaginatedResponse<User>> {
-    const { data } = await api.get<PaginatedResponse<User>>('/users', { params });
+  async getUsers(params?: { role?: string; search?: string; page?: number; limit?: number }): Promise<User[]> {
+    const { data } = await api.get<User[]>('/users', { params });
     return data;
   },
 
