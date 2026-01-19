@@ -1,0 +1,98 @@
+export interface User {
+  _id: string;
+  name: string;
+  email: string;
+  role: 'admin' | 'aluno';
+  avatar?: string;
+  phone?: string;
+  isActive: boolean;
+  createdAt: string;
+}
+
+export interface Course {
+  _id: string;
+  title: string;
+  description: string;
+  thumbnail?: string;
+  instructor: User;
+  category: string;
+  status: 'draft' | 'published' | 'archived';
+  lessons: Lesson[];
+  enrolledStudents: string[];
+  duration: number;
+  level: 'iniciante' | 'intermediário' | 'avançado';
+  createdAt: string;
+}
+
+export interface Lesson {
+  title: string;
+  description?: string;
+  content?: string;
+  videoUrl?: string;
+  duration?: number;
+  order: number;
+  resources?: {
+    name: string;
+    url: string;
+    type: string;
+  }[];
+}
+
+export interface Schedule {
+  _id: string;
+  title: string;
+  description?: string;
+  date: string;
+  startTime: string;
+  endTime: string;
+  function: string;
+  assignedTo: User;
+  substitute?: User;
+  status: 'pending' | 'confirmed' | 'completed' | 'cancelled';
+  notes?: string;
+  createdBy: User;
+  createdAt: string;
+}
+
+export interface Announcement {
+  _id: string;
+  title: string;
+  content: string;
+  author: User;
+  priority: 'low' | 'normal' | 'high' | 'urgent';
+  image?: string;
+  targetAudience: string[];
+  isActive: boolean;
+  isPinned: boolean;
+  expiresAt?: string;
+  viewedBy: string[];
+  createdAt: string;
+}
+
+export interface Progress {
+  _id: string;
+  user: string;
+  course: string;
+  completedLessons: number[];
+  progress: number;
+  lastAccessedAt: string;
+  completedAt?: string;
+}
+
+export interface ApiResponse<T = any> {
+  success: boolean;
+  message?: string;
+  data?: T;
+  error?: string;
+}
+
+export interface PaginatedResponse<T = any> {
+  success: boolean;
+  data: T[];
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    pages: number;
+  };
+}
