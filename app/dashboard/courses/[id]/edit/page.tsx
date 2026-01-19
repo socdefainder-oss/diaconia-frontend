@@ -33,7 +33,13 @@ export default function EditCoursePage({ params }: { params: { id: string } }) {
         category: course.category,
         level: course.level || 'iniciante',
         thumbnail: course.thumbnail || '',
-        lessons: course.lessons || [],
+        lessons: (course.lessons || []).map(lesson => ({
+          title: lesson.title,
+          description: lesson.description || '',
+          videoUrl: lesson.videoUrl || '',
+          duration: lesson.duration || 0,
+          order: lesson.order || 0,
+        })),
       });
     } catch (error: any) {
       toast.error('Erro ao carregar curso');
