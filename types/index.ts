@@ -44,14 +44,10 @@ export interface Schedule {
   title: string;
   description?: string;
   date: string;
-  startTime: string;
-  endTime: string;
-  function: string;
-  assignedTo: User;
-  substitute?: User;
-  status: 'pending' | 'confirmed' | 'completed' | 'cancelled';
-  notes?: string;
-  createdBy: User;
+  time?: string;
+  location?: string;
+  assignedTo: User | string;
+  isConfirmed?: boolean;
   createdAt: string;
 }
 
