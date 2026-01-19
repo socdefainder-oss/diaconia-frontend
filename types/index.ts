@@ -14,13 +14,14 @@ export interface Course {
   title: string;
   description: string;
   thumbnail?: string;
-  instructor: User;
+  instructor: User | string;
   category: string;
-  status: 'draft' | 'published' | 'archived';
-  lessons: Lesson[];
-  enrolledStudents: string[];
-  duration: number;
-  level: 'iniciante' | 'intermediário' | 'avançado';
+  isActive?: boolean;
+  lessons?: Lesson[];
+  enrolledStudents?: string[];
+  enrolledCount?: number;
+  duration: string;
+  level?: 'iniciante' | 'intermediário' | 'avançado';
   createdAt: string;
 }
 
