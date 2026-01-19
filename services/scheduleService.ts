@@ -25,13 +25,13 @@ export const scheduleService = {
     await api.put(`/schedules/${id}/confirm`);
   },
 
-  async autoGenerateSchedules(params: {
-    startDate: string;
-    endDate: string;
-    functions: string[];
-    daysOfWeek: number[];
-    startTime: string;
-    endTime: string;
+  async autoGenerateSchedules(params?: {
+    startDate?: string;
+    endDate?: string;
+    functions?: string[];
+    daysOfWeek?: number[];
+    startTime?: string;
+    endTime?: string;
   }): Promise<Schedule[]> {
     const { data } = await api.post<ApiResponse<Schedule[]>>('/schedules/auto-generate', params);
     return data.data!;
