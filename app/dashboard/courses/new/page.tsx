@@ -148,7 +148,7 @@ export default function NewCoursePage() {
 
           {formData.lessons.length === 0 ? (
             <p className="text-gray-500 text-center py-8">
-              Nenhuma aula adicionada. Clique em "Adicionar Aula" para começar.
+              Nenhuma aula adicionada. Clique em &quot;Adicionar Aula&quot; para começar.
             </p>
           ) : (
             <div className="space-y-4">
