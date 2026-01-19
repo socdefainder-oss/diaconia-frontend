@@ -22,6 +22,7 @@ export default function CertificatePage({ params }: { params: { id: string } }) 
 
   useEffect(() => {
     loadCertificate();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const loadCertificate = async () => {

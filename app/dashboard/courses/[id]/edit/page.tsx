@@ -22,6 +22,7 @@ export default function EditCoursePage({ params }: { params: { id: string } }) {
 
   useEffect(() => {
     loadCourse();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const loadCourse = async () => {

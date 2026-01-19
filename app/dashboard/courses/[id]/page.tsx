@@ -22,6 +22,7 @@ export default function CourseViewPage({ params }: { params: { id: string } }) {
 
   useEffect(() => {
     loadCourseAndProgress();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const loadCourseAndProgress = async () => {
@@ -55,12 +56,12 @@ export default function CourseViewPage({ params }: { params: { id: string } }) {
     const modules = course?.modules || [];
     if (moduleIndex >= modules.length) return false;
 
-    const module = modules[moduleIndex];
+    const courseModule = modules[moduleIndex];
     
     // Verificar aula anterior no mesmo módulo
     if (lessonIndex > 0) {
-      const previousLesson = module.lessons[lessonIndex - 1];
-      return isLessonCompleted(module._id || '', previousLesson._id || '');
+      const previousLesson = courseModule.lessons[lessonIndex - 1];
+      return isLessonCompleted(courseModule._id || '', previousLesson._id || '');
     }
 
     // Verificar última aula do módulo anterior
@@ -85,16 +86,16 @@ export default function CourseViewPage({ params }: { params: { id: string } }) {
   const handleCompleteLesson = async () => {
     if (!course?.modules || completing) return;
 
-    const module = course.modules[selectedModule];
-    const lesson = module.lessons[selectedLesson];
+    const courseModule = course.modules[selectedModule];
+    const lesson = courseModule.lessons[selectedLesson];
 
-    if (!module._id || !lesson._id) return;
+    if (!courseModule._id || !lesson._id) return;
 
     setCompleting(true);
     try {
       const updatedProgress = await progressService.completeLesson(
         params.id,
-        module._id,
+        courseModule._id,
         lesson._id
       );
       setProgress(updatedProgress);
@@ -106,7 +107,7 @@ export default function CourseViewPage({ params }: { params: { id: string } }) {
       }
 
       // Avançar para próxima aula automaticamente
-      if (selectedLesson < module.lessons.length - 1) {
+      if (selectedLesson < courseModule.lessons.length - 1) {
         setSelectedLesson(selectedLesson + 1);
       } else if (selectedModule < course.modules.length - 1) {
         setSelectedModule(selectedModule + 1);
