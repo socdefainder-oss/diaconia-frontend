@@ -16,6 +16,7 @@ export interface Course {
   thumbnail?: string;
   instructor: User | string;
   category: string;
+  status?: 'draft' | 'published' | 'archived';
   isActive?: boolean;
   lessons?: Lesson[];
   enrolledStudents?: string[];
