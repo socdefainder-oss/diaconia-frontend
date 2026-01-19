@@ -47,7 +47,7 @@ export default function CoursesPage() {
 
   const handleEnroll = async (courseId: string) => {
     try {
-      await courseService.enrollInCourse(courseId);
+      await courseService.enrollCourse(courseId);
       toast.success('Inscrição realizada com sucesso!');
       loadCourses();
     } catch (error: any) {
