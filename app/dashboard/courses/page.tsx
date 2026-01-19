@@ -45,6 +45,18 @@ export default function CoursesPage() {
     }
   };
 
+  const handleToggleStatus = async (id: string, currentStatus: string) => {
+    const newStatus = currentStatus === 'published' ? 'draft' : 'published';
+    
+    try {
+      await courseService.toggleStatus(id, newStatus);
+      toast.success(newStatus === 'published' ? 'Curso publicado!' : 'Curso despublicado!');
+      loadCourses();
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || 'Erro ao alterar status');
+    }
+  };
+
   const handleEnroll = async (courseId: string) => {
     try {
       await courseService.enrollCourse(courseId);
@@ -127,16 +139,24 @@ export default function CoursesPage() {
                 </div>
 
                 {/* Status Badge */}
-                <div>
+                <div className="flex items-center gap-2">
                   <span
                     className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                      course.isActive
+                      course.status === 'published'
                         ? 'bg-green-100 text-green-800'
                         : 'bg-gray-100 text-gray-800'
                     }`}
                   >
-                    {course.isActive ? 'Ativo' : 'Inativo'}
+                    {course.status === 'published' ? 'Publicado' : 'Rascunho'}
                   </span>
+                  {user?.role === 'admin' && (
+                    <button
+                      onClick={() => handleToggleStatus(course._id, course.status || 'draft')}
+                      className="text-xs text-primary-600 hover:text-primary-700 font-medium"
+                    >
+                      {course.status === 'published' ? 'Despublicar' : 'Publicar'}
+                    </button>
+                  )}
                 </div>
 
                 {/* Actions */}

@@ -35,4 +35,9 @@ export const courseService = {
   async completeLesson(courseId: string, lessonIndex: number): Promise<void> {
     await api.post(`/courses/${courseId}/lessons/${lessonIndex}/complete`);
   },
+
+  async toggleStatus(id: string, status: 'published' | 'draft'): Promise<Course> {
+    const { data } = await api.put<ApiResponse<Course>>(`/courses/${id}`, { status });
+    return data.data!;
+  },
 };
