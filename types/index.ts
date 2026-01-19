@@ -9,6 +9,34 @@ export interface User {
   createdAt: string;
 }
 
+export interface Resource {
+  name: string;
+  url: string;
+  type: 'pdf' | 'video' | 'link' | 'image' | 'document';
+  size?: number;
+}
+
+export interface Lesson {
+  _id?: string;
+  title: string;
+  description?: string;
+  content?: string;
+  videoUrl?: string;
+  videoDuration?: number; // segundos
+  duration?: number; // mantido para compatibilidade
+  order: number;
+  resources?: Resource[];
+  isPreview?: boolean;
+}
+
+export interface Module {
+  _id?: string;
+  title: string;
+  description?: string;
+  order: number;
+  lessons: Lesson[];
+}
+
 export interface Course {
   _id: string;
   title: string;
@@ -18,26 +46,15 @@ export interface Course {
   category: string;
   status?: 'draft' | 'published' | 'archived';
   isActive?: boolean;
-  lessons?: Lesson[];
+  modules?: Module[]; // NOVA estrutura hierárquica
+  lessons?: Lesson[]; // Mantido para compatibilidade
   enrolledStudents?: string[];
   enrolledCount?: number;
-  duration: string;
+  duration: string | number;
+  totalLessons?: number;
   level?: 'iniciante' | 'intermediário' | 'avançado';
+  certificateEnabled?: boolean;
   createdAt: string;
-}
-
-export interface Lesson {
-  title: string;
-  description?: string;
-  content?: string;
-  videoUrl?: string;
-  duration?: number;
-  order: number;
-  resources?: {
-    name: string;
-    url: string;
-    type: string;
-  }[];
 }
 
 export interface Schedule {
@@ -66,14 +83,26 @@ export interface Announcement {
   createdAt: string;
 }
 
+export interface LessonProgress {
+  lessonId: string;
+  moduleId: string;
+  completed: boolean;
+  completedAt?: string;
+  watchedDuration: number;
+}
+
 export interface Progress {
   _id: string;
-  user: string;
-  course: string;
-  completedLessons: number[];
-  progress: number;
+  userId: string;
+  courseId: string;
+  enrolledAt: string;
   lastAccessedAt: string;
+  completedLessons: LessonProgress[];
+  progress: number; // 0-100
+  completed: boolean;
   completedAt?: string;
+  certificateIssued: boolean;
+  certificateUrl?: string;
 }
 
 export interface ApiResponse<T = any> {
