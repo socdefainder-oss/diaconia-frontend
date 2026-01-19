@@ -1,8 +1,8 @@
-﻿'use client';
+'use client';
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { BookOpen, Calendar, Bell, Users, TrendingUp, Activity } from 'lucide-react';
+import { BookOpen, Calendar, Bell, Users, Activity } from 'lucide-react';
 import { userService } from '@/services/userService';
 import { User } from '@/types';
 import Link from 'next/link';
@@ -59,38 +59,38 @@ export default function DashboardPage() {
 
   if (loading || user?.role === 'aluno') {
     return (
-      <div className=\"flex items-center justify-center h-64\">
-        <div className=\"animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-600\"></div>
+      <div className="flex items-center justify-center h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-600"></div>
       </div>
     );
   }
 
   // Dashboard apenas para admin
   return (
-    <div className=\"space-y-8\">
+    <div className="space-y-8">
       {/* Header */}
       <div>
-        <h1 className=\"text-3xl font-bold text-gray-900\">
-          Bem-vindo, {user?.name}! 
+        <h1 className="text-3xl font-bold text-gray-900">
+          Bem-vindo, {user?.name}! 👋
         </h1>
-        <p className=\"text-gray-600 mt-2\">
+        <p className="text-gray-600 mt-2">
           Painel Administrativo
         </p>
       </div>
 
       {/* Stats Cards */}
       {stats && (
-        <div className=\"grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6\">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {adminCards.map((card) => {
             const Icon = card.icon;
             return (
-              <div key={card.title} className=\"card\">
-                <div className=\"flex items-center justify-between\">
+              <div key={card.title} className="card">
+                <div className="flex items-center justify-between">
                   <div>
-                    <p className=\"text-sm text-gray-600\">{card.title}</p>
-                    <p className=\"text-3xl font-bold text-gray-900 mt-2\">{card.value}</p>
+                    <p className="text-sm text-gray-600">{card.title}</p>
+                    <p className="text-3xl font-bold text-gray-900 mt-2">{card.value}</p>
                   </div>
-                  <div className={\\ w-12 h-12 rounded-lg flex items-center justify-center text-white\}>
+                  <div className={`${card.color} w-12 h-12 rounded-lg flex items-center justify-center text-white`}>
                     <Icon size={24} />
                   </div>
                 </div>
@@ -102,23 +102,23 @@ export default function DashboardPage() {
 
       {/* Quick Actions */}
       <div>
-        <h2 className=\"text-xl font-semibold text-gray-900 mb-4\">Ações Rápidas</h2>
-        <div className=\"grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6\">
+        <h2 className="text-xl font-semibold text-gray-900 mb-4">Ações Rápidas</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {quickActions.map((action) => {
             const Icon = action.icon;
             return (
               <Link
                 key={action.title}
                 href={action.href}
-                className=\"card hover:shadow-md transition-shadow cursor-pointer group\"
+                className="card hover:shadow-md transition-shadow cursor-pointer group"
               >
-                <div className=\"flex items-center gap-4\">
-                  <div className=\"w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center text-primary-600 group-hover:bg-primary-600 group-hover:text-white transition-colors\">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center text-primary-600 group-hover:bg-primary-600 group-hover:text-white transition-colors">
                     <Icon size={24} />
                   </div>
                   <div>
-                    <h3 className=\"font-semibold text-gray-900\">{action.title}</h3>
-                    <p className=\"text-sm text-gray-600\">{action.description}</p>
+                    <h3 className="font-semibold text-gray-900">{action.title}</h3>
+                    <p className="text-sm text-gray-600">{action.description}</p>
                   </div>
                 </div>
               </Link>
@@ -129,10 +129,10 @@ export default function DashboardPage() {
 
       {/* Recent Activity */}
       <div>
-        <h2 className=\"text-xl font-semibold text-gray-900 mb-4\">Atividade Recente</h2>
-        <div className=\"card\">
-          <div className=\"text-center py-12 text-gray-500\">
-            <Activity size={48} className=\"mx-auto mb-4 opacity-50\" />
+        <h2 className="text-xl font-semibold text-gray-900 mb-4">Atividade Recente</h2>
+        <div className="card">
+          <div className="text-center py-12 text-gray-500">
+            <Activity size={48} className="mx-auto mb-4 opacity-50" />
             <p>Nenhuma atividade recente</p>
           </div>
         </div>
