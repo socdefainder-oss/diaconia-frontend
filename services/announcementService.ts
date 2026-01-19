@@ -2,8 +2,8 @@ import api from '@/lib/api';
 import { Announcement, PaginatedResponse, ApiResponse } from '@/types';
 
 export const announcementService = {
-  async getAnnouncements(page = 1, limit = 10): Promise<PaginatedResponse<Announcement>> {
-    const { data } = await api.get<PaginatedResponse<Announcement>>('/announcements', {
+  async getAnnouncements(page = 1, limit = 10): Promise<Announcement[]> {
+    const { data } = await api.get<Announcement[]>('/announcements', {
       params: { page, limit },
     });
     return data;
