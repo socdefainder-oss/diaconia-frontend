@@ -98,9 +98,7 @@ export default function CoursesPage() {
             <div key={course._id} className="card hover:shadow-lg transition-shadow">
               {/* Thumbnail */}
               {course.thumbnail && (
-                <img alt="Course thumbnail"
-                  src={course.thumbnail}
-                  alt={course.title}
+                <img src={course.thumbnail} alt={course.title}
                   className="w-full h-48 object-cover rounded-t-lg -mx-6 -mt-6 mb-4"
                 />
               )}
@@ -193,3 +191,4 @@ export default function CoursesPage() {
     </div>
   );
 }
+
