@@ -23,7 +23,16 @@ export default function NewCoursePage() {
     setLoading(true);
 
     try {
-      await courseService.createCourse(formData);
+      // Adicionar order às lessons
+      const courseData = {
+        ...formData,
+        lessons: formData.lessons.map((lesson, index) => ({
+          ...lesson,
+          order: index + 1,
+        })),
+      };
+      
+      await courseService.createCourse(courseData);
       toast.success('Curso criado com sucesso!');
       router.push('/dashboard/courses');
     } catch (error: any) {
