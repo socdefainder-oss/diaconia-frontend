@@ -3,11 +3,13 @@
 import { useEffect, useState } from 'react';
 import { Users, UserPlus, Edit, Trash2, Search, Lock, X, Shield } from 'lucide-react';
 import { userService } from '@/services/userService';
-import { User } from '@/types';
+import { teamService } from '@/services/teamService';
+import { User, Team } from '@/types';
 import toast from 'react-hot-toast';
 
 export default function UsersPage() {
   const [users, setUsers] = useState<User[]>([]);
+  const [teams, setTeams] = useState<Team[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [showModal, setShowModal] = useState(false);
@@ -22,6 +24,7 @@ export default function UsersPage() {
     password: '',
     role: 'aluno',
     phone: '',
+    teamId: '',
   });
 
   const [passwordData, setPasswordData] = useState({
@@ -31,6 +34,7 @@ export default function UsersPage() {
 
   useEffect(() => {
     loadUsers();
+    loadTeams();
   }, []);
 
   const loadUsers = async () => {
@@ -44,6 +48,15 @@ export default function UsersPage() {
     }
   };
 
+  const loadTeams = async () => {
+    try {
+      const data = await teamService.getTeams();
+      setTeams(data);
+    } catch (error: any) {
+      console.error('Erro ao carregar times:', error);
+    }
+  };
+
   const openCreateModal = () => {
     setEditingUser(null);
     setFormData({
@@ -52,6 +65,7 @@ export default function UsersPage() {
       password: '',
       role: 'aluno',
       phone: '',
+      teamId: '',
     });
     setShowModal(true);
   };
@@ -64,6 +78,7 @@ export default function UsersPage() {
       password: '',
       role: user.role,
       phone: user.phone || '',
+      teamId: '',
     });
     setShowModal(true);
   };
@@ -76,6 +91,13 @@ export default function UsersPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Validar time para usuários não-admin
+    if (!editingUser && formData.role !== 'admin' && !formData.teamId) {
+      toast.error('Selecione um time para o usuário');
+      return;
+    }
+
     setSubmitting(true);
 
     try {
@@ -90,7 +112,17 @@ export default function UsersPage() {
         toast.success('Usuário atualizado com sucesso!');
       } else {
         // Criar novo usuário
-        await userService.createUser(formData as any);
+        const newUser = await userService.createUser(formData as any);
+        
+        // Adicionar ao time se selecionado
+        if (formData.teamId) {
+          try {
+            await teamService.addMember(formData.teamId, newUser._id);
+          } catch (error) {
+            console.error('Erro ao adicionar ao time:', error);
+          }
+        }
+        
         toast.success('Usuário criado com sucesso!');
       }
       setShowModal(false);
@@ -357,6 +389,27 @@ export default function UsersPage() {
                   <option value="admin">Administrador</option>
                 </select>
               </div>
+
+              {!editingUser && formData.role !== 'admin' && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Time <span className="text-red-500">*</span>
+                  </label>
+                  <select
+                    value={formData.teamId}
+                    onChange={(e) => setFormData({ ...formData, teamId: e.target.value })}
+                    className="input"
+                    required={formData.role !== 'admin'}
+                  >
+                    <option value="">Selecione um time</option>
+                    {teams.map((team) => (
+                      <option key={team._id} value={team._id}>
+                        {team.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
 
               {!editingUser && (
                 <div>
