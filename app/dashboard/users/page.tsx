@@ -204,7 +204,7 @@ export default function UsersPage() {
         <div className="card text-center py-12">
           <Users size={48} className="mx-auto mb-4 text-gray-400" />
           <h3 className="text-lg font-semibold text-gray-900 mb-2">Nenhum usuário encontrado</h3>
-          <p className="text-gray-600">Clique em "Novo Usuário" para adicionar o primeiro usuário</p>
+          <p className="text-gray-600">Clique em &quot;Novo Usuário&quot; para adicionar o primeiro usuário</p>
         </div>
       ) : (
         <div className="card overflow-x-auto">
@@ -455,3 +455,4 @@ export default function UsersPage() {
     </div>
   );
 }
+
