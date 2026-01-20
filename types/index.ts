@@ -1,8 +1,8 @@
-export interface User {
+﻿export interface User {
   _id: string;
   name: string;
   email: string;
-  role: 'admin' | 'aluno';
+  role: 'admin' | 'professor' | 'aluno';
   avatar?: string;
   phone?: string;
   isActive: boolean;
@@ -46,13 +46,13 @@ export interface Course {
   category: string;
   status?: 'draft' | 'published' | 'archived';
   isActive?: boolean;
-  modules?: Module[]; // NOVA estrutura hierárquica
+  modules?: Module[]; // NOVA estrutura hierÃ¡rquica
   lessons?: Lesson[]; // Mantido para compatibilidade
   enrolledStudents?: string[];
   enrolledCount?: number;
   duration: string | number;
   totalLessons?: number;
-  level?: 'iniciante' | 'intermediário' | 'avançado';
+  level?: 'iniciante' | 'intermediÃ¡rio' | 'avanÃ§ado';
   certificateEnabled?: boolean;
   createdAt: string;
 }
@@ -122,3 +122,4 @@ export interface PaginatedResponse<T = any> {
     pages: number;
   };
 }
+
