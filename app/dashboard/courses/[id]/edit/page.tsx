@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -32,7 +32,7 @@ export default function EditCoursePage({ params }: { params: { id: string } }) {
         title: course.title,
         description: course.description,
         category: course.category,
-        level: course.level || 'iniciante',
+        level: (course.level || 'iniciante') as any,
         thumbnail: course.thumbnail || '',
         lessons: (course.lessons || []).map(lesson => ({
           title: lesson.title,
