@@ -15,6 +15,7 @@ export default function RegisterPage() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    phone: '',
     password: '',
     confirmPassword: '',
     teamId: '',
@@ -36,6 +37,28 @@ export default function RegisterPage() {
     }
   };
 
+  const formatPhone = (value: string) => {
+    // Remove tudo que não é número
+    const numbers = value.replace(/\D/g, '');
+    
+    // Limita a 11 dígitos
+    const limited = numbers.slice(0, 11);
+    
+    // Formata como (DD) XXXXX-XXXX
+    if (limited.length <= 2) {
+      return limited;
+    } else if (limited.length <= 7) {
+      return `(${limited.slice(0, 2)}) ${limited.slice(2)}`;
+    } else {
+      return `(${limited.slice(0, 2)}) ${limited.slice(2, 7)}-${limited.slice(7)}`;
+    }
+  };
+
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formatted = formatPhone(e.target.value);
+    setFormData({ ...formData, phone: formatted });
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -55,7 +78,8 @@ export default function RegisterPage() {
       const { user, token } = await authService.register(
         formData.name,
         formData.email,
-        formData.password
+        formData.password,
+        formData.phone
       );
       
       localStorage.setItem('token', token);
@@ -116,6 +140,20 @@ export default function RegisterPage() {
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 className="input"
                 placeholder="seu@email.com"
+                required
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Celular
+              </label>
+              <input
+                type="tel"
+                value={formData.phone}
+                onChange={handlePhoneChange}
+                className="input"
+                placeholder="(00) 00000-0000"
                 required
               />
             </div>
