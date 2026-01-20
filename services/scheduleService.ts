@@ -1,10 +1,10 @@
-import api from '@/lib/api';
+﻿import api from '@/lib/api';
 import { Schedule, PaginatedResponse, ApiResponse } from '@/types';
 
 export const scheduleService = {
   async getSchedules(params?: { startDate?: string; endDate?: string; page?: number; limit?: number }): Promise<Schedule[]> {
-    const { data } = await api.get<Schedule[]>('/schedules', { params });
-    return data;
+    const { data } = await api.get<ApiResponse<Schedule[]>>('/schedules', { params });
+    return data.data || [];
   },
 
   async createSchedule(scheduleData: Partial<Schedule>): Promise<Schedule> {
