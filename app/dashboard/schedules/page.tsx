@@ -79,7 +79,7 @@ export default function TeamsPage() {
       const teamData = {
         ...formData,
         shift: formData.shift || undefined,
-      };
+      } as any;
 
       if (editingTeam) {
         await teamService.updateTeam(editingTeam._id, teamData);
