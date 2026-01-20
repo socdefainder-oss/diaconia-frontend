@@ -15,15 +15,15 @@ export const announcementService = {
   },
 
   async updateAnnouncement(id: string, announcementData: Partial<Announcement>): Promise<Announcement> {
-    const { data } = await api.put<ApiResponse<Announcement>>(/announcements/, announcementData);
+    const { data } = await api.put<ApiResponse<Announcement>>(`/announcements/${id}`, announcementData);
     return data.data!;
   },
 
   async deleteAnnouncement(id: string): Promise<void> {
-    await api.delete(/announcements/);
+    await api.delete(`/announcements/${id}`);
   },
 
   async markAsViewed(id: string): Promise<void> {
-    await api.put(/announcements//view);
+    await api.put(`/announcements/${id}/view`);
   },
 };
