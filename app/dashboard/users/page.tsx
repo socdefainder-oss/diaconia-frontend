@@ -90,13 +90,7 @@ export default function UsersPage() {
         toast.success('Usuário atualizado com sucesso!');
       } else {
         // Criar novo usuário
-        await userService.createUser({
-          name: formData.name,
-          email: formData.email,
-          password: formData.password,
-          role: formData.role as any,
-          phone: formData.phone,
-        });
+        await userService.createUser(formData as any);
         toast.success('Usuário criado com sucesso!');
       }
       setShowModal(false);
@@ -455,4 +449,5 @@ export default function UsersPage() {
     </div>
   );
 }
+
 
