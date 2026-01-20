@@ -63,7 +63,7 @@ export default function EditCoursePage({ params }: { params: { id: string } }) {
         })),
       };
       
-      await courseService.updateCourse(params.id, courseData);
+      await courseService.updateCourse(params.id, courseData as any);
       toast.success('Curso atualizado com sucesso!');
       router.push('/dashboard/courses');
     } catch (error: any) {
