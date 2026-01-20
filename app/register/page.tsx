@@ -29,8 +29,10 @@ export default function RegisterPage() {
     try {
       const data = await teamService.getTeams();
       setTeams(data);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Erro ao carregar times:', error);
+      // Não bloqueia o formulário se não conseguir carregar times
+      toast.error('Não foi possível carregar os times. Tente novamente mais tarde.');
     }
   };
 
