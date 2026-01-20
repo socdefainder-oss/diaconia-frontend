@@ -124,3 +124,18 @@ export interface PaginatedResponse<T = any> {
 }
 
 
+
+
+export interface Team {
+  _id: string;
+  name: string;
+  dayOfWeek: 'domingo' | 'segunda' | 'terça' | 'quarta' | 'quinta' | 'sexta' | 'sábado';
+  shift?: 'manhã' | 'tarde' | 'noite';
+  teamNumber: number;
+  description?: string;
+  color?: string;
+  members: User[];
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
