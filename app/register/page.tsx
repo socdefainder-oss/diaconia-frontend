@@ -1,27 +1,49 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { authService } from '@/services/authService';
+import { teamService } from '@/services/teamService';
+import { Team } from '@/types';
 import toast from 'react-hot-toast';
 import { UserPlus } from 'lucide-react';
 
 export default function RegisterPage() {
   const router = useRouter();
+  const [teams, setTeams] = useState<Team[]>([]);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     password: '',
     confirmPassword: '',
+    teamId: '',
   });
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    loadTeams();
+  }, []);
+
+  const loadTeams = async () => {
+    try {
+      const data = await teamService.getTeams();
+      setTeams(data);
+    } catch (error) {
+      console.error('Erro ao carregar times:', error);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (formData.password !== formData.confirmPassword) {
       toast.error('As senhas não coincidem');
+      return;
+    }
+
+    if (!formData.teamId) {
+      toast.error('Selecione um time');
       return;
     }
 
@@ -33,8 +55,17 @@ export default function RegisterPage() {
         formData.email,
         formData.password
       );
+      
       localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify(user));
+      
+      // Adicionar usuário ao time
+      try {
+        await teamService.addMember(formData.teamId, user._id);
+      } catch (error) {
+        console.error('Erro ao adicionar ao time:', error);
+      }
+      
       toast.success('Conta criada com sucesso!');
       router.push('/dashboard');
     } catch (error: any) {
@@ -115,6 +146,25 @@ export default function RegisterPage() {
                 minLength={6}
                 required
               />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Selecione seu Time <span className="text-red-500">*</span>
+              </label>
+              <select
+                value={formData.teamId}
+                onChange={(e) => setFormData({ ...formData, teamId: e.target.value })}
+                className="input"
+                required
+              >
+                <option value="">Escolha um time</option>
+                {teams.map((team) => (
+                  <option key={team._id} value={team._id}>
+                    {team.name}
+                  </option>
+                ))}
+              </select>
             </div>
 
             <button
