@@ -1,10 +1,11 @@
-﻿export interface User {
+export interface User {
   _id: string;
   name: string;
   email: string;
   role: 'admin' | 'professor' | 'aluno';
   avatar?: string;
   phone?: string;
+  team?: string;
   isActive: boolean;
   createdAt: string;
 }
@@ -46,13 +47,13 @@ export interface Course {
   category: string;
   status?: 'draft' | 'published' | 'archived';
   isActive?: boolean;
-  modules?: Module[]; // NOVA estrutura hierÃ¡rquica
+  modules?: Module[]; // NOVA estrutura hierárquica
   lessons?: Lesson[]; // Mantido para compatibilidade
   enrolledStudents?: string[];
   enrolledCount?: number;
   duration: string | number;
   totalLessons?: number;
-  level?: 'iniciante' | 'intermediÃ¡rio' | 'avanÃ§ado';
+  level?: 'iniciante' | 'intermediário' | 'avançado';
   certificateEnabled?: boolean;
   createdAt: string;
 }
@@ -129,8 +130,8 @@ export interface PaginatedResponse<T = any> {
 export interface Team {
   _id: string;
   name: string;
-  dayOfWeek: 'domingo' | 'segunda' | 'terça' | 'quarta' | 'quinta' | 'sexta' | 'sábado';
-  shift?: 'manhã' | 'tarde' | 'noite';
+  dayOfWeek: 'domingo' | 'segunda' | 'ter�a' | 'quarta' | 'quinta' | 'sexta' | 's�bado';
+  shift?: 'manh�' | 'tarde' | 'noite';
   teamNumber: number;
   description?: string;
   color?: string;
