@@ -113,16 +113,15 @@ export default function UsersPage() {
         toast.success('Usuário atualizado com sucesso!');
       } else {
         // Criar novo usuário
-        const newUser = await userService.createUser(formData as any);
-        
-        // Adicionar ao time se selecionado
-        if (formData.teamId) {
-          try {
-            await teamService.addMember(formData.teamId, newUser._id);
-          } catch (error) {
-            console.error('Erro ao adicionar ao time:', error);
-          }
-        }
+        const userData: any = {
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+          role: formData.role,
+          phone: formData.phone,
+          team: formData.teamId || undefined,
+        };
+        const newUser = await userService.createUser(userData);
         
         toast.success('Usuário criado com sucesso!');
       }
