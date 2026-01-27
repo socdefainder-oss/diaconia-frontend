@@ -284,10 +284,8 @@ export default function CourseViewPage({ params }: { params: { id: string } }) {
                 moduleId={currentModule?._id || null}
                 lessonId={currentLesson._id!}
                 onComplete={(passed) => {
-                  setShowQuiz(false);
-                  if (passed) {
-                    window.location.reload();
-                  }
+                  // Não fazer nada aqui - deixar o QuizPlayer mostrar o resultado
+                  // O QuizPlayer já tem o botão "Continuar para Próxima Aula" que recarrega a página
                 }}
               />
             </div>
