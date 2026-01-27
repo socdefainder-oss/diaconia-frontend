@@ -103,7 +103,13 @@ export default function CourseViewPage({ params }: { params: { id: string } }) {
     if (moduleIndex >= effectiveModules.length) return false;
 
     const courseModule = modules[moduleIndex];
+    const currentLesson = courseModule.lessons[lessonIndex];
     
+    // Se esta aula já foi concluída, está desbloqueada (para permitir revisão)
+    if (isLessonCompleted(courseModule._id || '', currentLesson._id || '')) {
+      return true;
+    }
+
     // Verificar aula anterior no mesmo módulo
     if (lessonIndex > 0) {
       const previousLesson = courseModule.lessons[lessonIndex - 1];
