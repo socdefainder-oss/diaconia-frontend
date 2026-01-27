@@ -55,7 +55,8 @@ export default function QuizPlayer({ courseId, moduleId, lessonId, onComplete }:
       setError('');
       const data = await quizService.submitAnswers(courseId, moduleId, lessonId, answers);
       setResult(data);
-      onComplete(data.passed);
+      // Não chamar onComplete aqui - apenas setar o resultado
+      // onComplete será chamado quando o usuário clicar no botão "Continuar"
     } catch (err: any) {
       setError(err.response?.data?.message || 'Erro ao enviar respostas');
     } finally {
@@ -127,7 +128,7 @@ export default function QuizPlayer({ courseId, moduleId, lessonId, onComplete }:
           )}
           {result.passed && (
             <button
-              onClick={() => window.location.reload()}
+              onClick={() => onComplete(true)}
               className="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
             >
               Continuar para Próxima Aula

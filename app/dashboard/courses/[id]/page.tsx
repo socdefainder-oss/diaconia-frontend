@@ -283,9 +283,31 @@ export default function CourseViewPage({ params }: { params: { id: string } }) {
                 courseId={course._id}
                 moduleId={currentModule?._id || null}
                 lessonId={currentLesson._id!}
-                onComplete={(passed) => {
-                  // Não fazer nada aqui - deixar o QuizPlayer mostrar o resultado
-                  // O QuizPlayer já tem o botão "Continuar para Próxima Aula" que recarrega a página
+                onComplete={async (passed) => {
+                  if (passed) {
+                    // Recarregar progresso
+                    try {
+                      const updatedProgress = await progressService.getCourseProgress(params.id);
+                      setProgress(updatedProgress);
+                      
+                      // Fechar quiz e avançar para próxima aula
+                      setShowQuiz(false);
+                      
+                      // Avançar para próxima aula automaticamente
+                      if (selectedLesson < effectiveModules[selectedModule].lessons.length - 1) {
+                        setSelectedLesson(selectedLesson + 1);
+                        toast.success('✅ Aula concluída! Próxima aula desbloqueada.');
+                      } else if (selectedModule < effectiveModules.length - 1) {
+                        setSelectedModule(selectedModule + 1);
+                        setSelectedLesson(0);
+                        toast.success('✅ Módulo concluído! Próximo módulo desbloqueado.');
+                      } else {
+                        toast.success('🎉 Parabéns! Você completou o curso!');
+                      }
+                    } catch (error) {
+                      toast.error('Erro ao atualizar progresso');
+                    }
+                  }
                 }}
               />
             </div>
