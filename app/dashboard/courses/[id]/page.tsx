@@ -54,6 +54,32 @@ export default function CourseViewPage({ params }: { params: { id: string } }) {
       
       setCourse(courseData);
       setProgress(progressData);
+
+      // Encontrar a primeira aula não concluída para continuar de onde parou
+      const modules = courseData.modules && courseData.modules.length > 0
+        ? courseData.modules
+        : courseData.lessons && courseData.lessons.length > 0
+        ? [{ _id: 'default', title: courseData.title, lessons: courseData.lessons }]
+        : [];
+
+      let foundIncomplete = false;
+      for (let modIndex = 0; modIndex < modules.length; modIndex++) {
+        const mod = modules[modIndex];
+        for (let lessonIndex = 0; lessonIndex < mod.lessons.length; lessonIndex++) {
+          const lesson = mod.lessons[lessonIndex];
+          const isCompleted = progressData?.completedLessons?.some(
+            (lp: any) => lp.lessonId === lesson._id && lp.completed
+          );
+          
+          if (!isCompleted) {
+            setSelectedModule(modIndex);
+            setSelectedLesson(lessonIndex);
+            foundIncomplete = true;
+            break;
+          }
+        }
+        if (foundIncomplete) break;
+      }
     } catch (error: any) {
       toast.error('Erro ao carregar curso');
       router.push('/dashboard/courses');
