@@ -148,7 +148,7 @@ export default function CourseViewPage({ params }: { params: { id: string } }) {
       const videoId = videoUrl.includes('youtu.be')
         ? videoUrl.split('youtu.be/')[1]?.split('?')[0]
         : videoUrl.split('v=')[1]?.split('&')[0];
-      return `https://www.youtube.com/embed/${videoId}`;
+      return `https://www.youtube.com/embed/${videoId}?enablejsapi=1&rel=0&modestbranding=1`;
     }
     // Vimeo
     if (videoUrl.includes('vimeo.com')) {
