@@ -90,8 +90,15 @@ export default function CourseViewPage({ params }: { params: { id: string } }) {
 
   const isLessonCompleted = (moduleId: string, lessonId: string): boolean => {
     if (!progress) return false;
+    
+    // Normalizar moduleId ('' e 'default' são equivalentes para cursos sem módulos)
+    const normalizedModuleId = (!moduleId || moduleId === 'default') ? '' : moduleId;
+    
     return progress.completedLessons.some(
-      (l) => l.moduleId === moduleId && l.lessonId === lessonId && l.completed
+      (l) => {
+        const lModuleId = (!l.moduleId || l.moduleId === 'default') ? '' : l.moduleId;
+        return lModuleId === normalizedModuleId && l.lessonId === lessonId && l.completed;
+      }
     );
   };
 
