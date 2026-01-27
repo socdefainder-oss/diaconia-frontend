@@ -1,0 +1,22 @@
+
+// Adicionar estas interfaces ao arquivo types/index.ts existente
+
+export interface QuizOption {
+  text: string;
+  isCorrect?: boolean; // Só vem para admin
+}
+
+export interface QuizQuestion {
+  question: string;
+  options: QuizOption[];
+  order: number;
+}
+
+// Atualizar interface Lesson para incluir:
+// quiz?: QuizQuestion[];
+
+// Atualizar interface LessonProgress para incluir:
+// quizCompleted: boolean;
+// quizScore?: number;
+// quizPassed: boolean;
+// quizAttempts: number;

@@ -1,4 +1,4 @@
-export interface User {
+﻿export interface User {
   _id: string;
   name: string;
   email: string;
@@ -17,6 +17,17 @@ export interface Resource {
   size?: number;
 }
 
+export interface QuizOption {
+  text: string;
+  isCorrect?: boolean; // Só vem para admin
+}
+
+export interface QuizQuestion {
+  question: string;
+  options: QuizOption[];
+  order: number;
+}
+
 export interface Lesson {
   _id?: string;
   title: string;
@@ -28,6 +39,7 @@ export interface Lesson {
   order: number;
   resources?: Resource[];
   isPreview?: boolean;
+  quiz?: QuizQuestion[]; // NOVO: questionário da aula
 }
 
 export interface Module {
@@ -47,8 +59,8 @@ export interface Course {
   category: string;
   status?: 'draft' | 'published' | 'archived';
   isActive?: boolean;
-  modules?: Module[]; // NOVA estrutura hierárquica
-  lessons?: Lesson[]; // Mantido para compatibilidade
+  modules?: Module[];
+  lessons?: Lesson[];
   enrolledStudents?: string[];
   enrolledCount?: number;
   duration: string | number;
@@ -90,6 +102,10 @@ export interface LessonProgress {
   completed: boolean;
   completedAt?: string;
   watchedDuration: number;
+  quizCompleted: boolean; // NOVO
+  quizScore?: number; // NOVO: 0-100
+  quizPassed: boolean; // NOVO: true se >= 80%
+  quizAttempts: number; // NOVO: número de tentativas
 }
 
 export interface Progress {
@@ -124,14 +140,11 @@ export interface PaginatedResponse<T = any> {
   };
 }
 
-
-
-
 export interface Team {
   _id: string;
   name: string;
-  dayOfWeek: 'domingo' | 'segunda' | 'ter�a' | 'quarta' | 'quinta' | 'sexta' | 's�bado';
-  shift?: 'manh�' | 'tarde' | 'noite';
+  dayOfWeek: 'domingo' | 'segunda' | 'terça' | 'quarta' | 'quinta' | 'sexta' | 'sábado';
+  shift?: 'manhã' | 'tarde' | 'noite';
   teamNumber: number;
   description?: string;
   color?: string;
