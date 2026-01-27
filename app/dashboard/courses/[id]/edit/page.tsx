@@ -6,6 +6,7 @@ import { ArrowLeft, Plus, Trash2, Upload } from 'lucide-react';
 import { courseService } from '@/services/courseService';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
+import QuizEditor from '@/components/QuizEditor';
 
 export default function EditCoursePage({ params }: { params: { id: string } }) {
   const router = useRouter();
@@ -17,7 +18,7 @@ export default function EditCoursePage({ params }: { params: { id: string } }) {
     category: '',
     level: 'iniciante' as 'iniciante' | 'intermediário' | 'avançado',
     thumbnail: '',
-    lessons: [] as { title: string; description: string; videoUrl: string; duration: number; order: number }[],
+    lessons: [] as { title: string; description: string; videoUrl: string; duration: number; order: number; quiz?: any[] }[],
   });
 
   useEffect(() => {
@@ -40,6 +41,7 @@ export default function EditCoursePage({ params }: { params: { id: string } }) {
           videoUrl: lesson.videoUrl || '',
           duration: lesson.duration || 0,
           order: lesson.order || 0,
+          quiz: lesson.quiz || [],
         })),
       });
     } catch (error: any) {
@@ -271,6 +273,23 @@ export default function EditCoursePage({ params }: { params: { id: string } }) {
                         onChange={(e) => updateLesson(index, 'duration', Number(e.target.value))}
                         className="input"
                         placeholder="Duração (minutos)"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Questionário (5 perguntas obrigatórias)
+                      </label>
+                      <QuizEditor
+                        quiz={lesson.quiz || []}
+                        onChange={(quiz) => {
+                          const newLessons = [...formData.lessons];
+                          newLessons[index] = {
+                            ...lesson,
+                            quiz: quiz
+                          };
+                          setFormData({ ...formData, lessons: newLessons });
+                        }}
                       />
                     </div>
                   </div>

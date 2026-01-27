@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, PlayCircle, Lock, CheckCircle, Clock, BookOpen, Award } from 'lucide-react';
 import { courseService } from '@/services/courseService';
@@ -9,6 +9,7 @@ import { certificateService } from '@/services/certificateService';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
 import { Course, Progress, Module, Lesson } from '@/types';
+import QuizPlayer from '@/components/QuizPlayer';
 
 export default function CourseViewPage({ params }: { params: { id: string } }) {
   const router = useRouter();
@@ -20,10 +21,29 @@ export default function CourseViewPage({ params }: { params: { id: string } }) {
   const [completing, setCompleting] = useState(false);
   const [generatingCertificate, setGeneratingCertificate] = useState(false);
 
+  const [showQuiz, setShowQuiz] = useState(false);
+  const [videoCompleted, setVideoCompleted] = useState(false);
+
+  // Calcular effectiveModules baseado no course
+  const effectiveModules = useMemo(() => {
+    if (!course) return [];
+    return course.modules && course.modules.length > 0
+      ? course.modules
+      : course.lessons && course.lessons.length > 0
+      ? [{ _id: 'default', title: course.title, description: '', order: 1, lessons: course.lessons }]
+      : [];
+  }, [course]);
+
   useEffect(() => {
     loadCourseAndProgress();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Resetar quiz ao mudar de aula
+  useEffect(() => {
+    setShowQuiz(false);
+    setVideoCompleted(false);
+  }, [selectedModule, selectedLesson]);
 
   const loadCourseAndProgress = async () => {
     try {
@@ -84,13 +104,22 @@ export default function CourseViewPage({ params }: { params: { id: string } }) {
   };
 
   const handleCompleteLesson = async () => {
-    if (!course?.modules || completing) return;
+    if (!effectiveModules.length || completing) return;
 
-    const courseModule = course.modules[selectedModule];
+    const courseModule = effectiveModules[selectedModule];
     const lesson = courseModule.lessons[selectedLesson];
 
     if (!courseModule._id || !lesson._id) return;
 
+    // Se a aula tem quiz, mostrar o quiz ao invés de marcar como concluída
+    if (lesson.quiz && lesson.quiz.length === 5) {
+      setShowQuiz(true);
+      setVideoCompleted(true);
+      toast('Responda o questionário para concluir a aula', { icon: 'ℹ️' });
+      return;
+    }
+
+    // Se não tem quiz, marcar como concluída diretamente
     setCompleting(true);
     try {
       const updatedProgress = await progressService.completeLesson(
@@ -177,12 +206,16 @@ export default function CourseViewPage({ params }: { params: { id: string } }) {
     );
   }
 
-  // Se não houver módulos, criar um módulo virtual com as lessons
-  const effectiveModules = course.modules && course.modules.length > 0
-    ? course.modules
-    : course.lessons && course.lessons.length > 0
-    ? [{ _id: 'default', title: course.title, description: '', order: 1, lessons: course.lessons }]
-    : [];
+  if (!effectiveModules.length || !effectiveModules[selectedModule]) {
+    return (
+      <div className="text-center py-12">
+        <p className="text-gray-500">Este curso não possui módulos ou aulas.</p>
+        <Link href="/dashboard/courses" className="btn-primary mt-4">
+          Voltar
+        </Link>
+      </div>
+    );
+  }
 
   const currentModule = effectiveModules[selectedModule];
   const currentLesson = currentModule.lessons[selectedLesson];
@@ -241,7 +274,24 @@ export default function CourseViewPage({ params }: { params: { id: string } }) {
                 <Award size={18} />
                 Ver Certificado
               </a>
-            )}
+           )}
+
+          {/* Quiz Player */}
+          {showQuiz && currentLesson?.quiz && currentLesson.quiz.length === 5 && (
+            <div className="mt-6">
+              <QuizPlayer
+                courseId={course._id}
+                moduleId={currentModule?._id || null}
+                lessonId={currentLesson._id!}
+                onComplete={(passed) => {
+                  setShowQuiz(false);
+                  if (passed) {
+                    window.location.reload();
+                  }
+                }}
+              />
+            </div>
+          )}
           </div>
         </div>
       </div>
