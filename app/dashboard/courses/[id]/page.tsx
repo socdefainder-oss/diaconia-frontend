@@ -53,8 +53,8 @@ export default function CourseViewPage({ params }: { params: { id: string } }) {
     // Primeira aula sempre desbloqueada
     if (moduleIndex === 0 && lessonIndex === 0) return true;
 
-    const modules = course?.modules || [];
-    if (moduleIndex >= modules.length) return false;
+    const modules = effectiveModules || [];
+    if (moduleIndex >= effectiveModules.length) return false;
 
     const courseModule = modules[moduleIndex];
     
@@ -109,7 +109,7 @@ export default function CourseViewPage({ params }: { params: { id: string } }) {
       // Avançar para próxima aula automaticamente
       if (selectedLesson < courseModule.lessons.length - 1) {
         setSelectedLesson(selectedLesson + 1);
-      } else if (selectedModule < course.modules.length - 1) {
+      } else if (selectedModule < effectiveModules.length - 1) {
         setSelectedModule(selectedModule + 1);
         setSelectedLesson(0);
       }
@@ -166,10 +166,10 @@ export default function CourseViewPage({ params }: { params: { id: string } }) {
     );
   }
 
-  if (!course || !course.modules || course.modules.length === 0) {
+  if (!course) {
     return (
       <div className="text-center py-12">
-        <p className="text-gray-500">Curso não possui conteúdo ainda.</p>
+        <p className="text-gray-500">Curso não encontrado.</p>
         <Link href="/dashboard/courses" className="btn-primary mt-4">
           Voltar
         </Link>
@@ -177,7 +177,14 @@ export default function CourseViewPage({ params }: { params: { id: string } }) {
     );
   }
 
-  const currentModule = course.modules[selectedModule];
+  // Se não houver módulos, criar um módulo virtual com as lessons
+  const effectiveModules = course.modules && course.modules.length > 0
+    ? course.modules
+    : course.lessons && course.lessons.length > 0
+    ? [{ _id: 'default', title: course.title, description: '', order: 1, lessons: course.lessons }]
+    : [];
+
+  const currentModule = effectiveModules[selectedModule];
   const currentLesson = currentModule.lessons[selectedLesson];
   const isCurrentLessonCompleted = isLessonCompleted(
     currentModule._id || '',
@@ -305,12 +312,12 @@ export default function CourseViewPage({ params }: { params: { id: string } }) {
           <div className="p-4 border-b bg-gray-50">
             <h3 className="font-semibold text-gray-900">Conteúdo do Curso</h3>
             <p className="text-sm text-gray-600 mt-1">
-              {course.totalLessons || 0} aulas em {course.modules.length} módulos
+              {course.totalLessons || 0} aulas em {effectiveModules.length} módulos
             </p>
           </div>
 
           <div className="divide-y">
-            {course.modules.map((module, moduleIndex) => (
+            {effectiveModules.map((module, moduleIndex) => (
               <div key={moduleIndex} className="p-4">
                 <h4 className="font-semibold text-gray-900 mb-3">
                   {moduleIndex + 1}. {module.title}
