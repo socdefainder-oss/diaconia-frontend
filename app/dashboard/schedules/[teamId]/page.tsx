@@ -60,7 +60,9 @@ export default function TeamSchedulePage() {
 
   const isConfirmado = (status: string) => {
     const st = normalizeStr(status);
-    return /^confirm/.test(st) || st === 'ok' || st === 'presenca' || st === 'presente';
+    // Verifica emojis de confirmação ou texto
+    return status.includes('✅') || status.includes('✔') || 
+           /^confirm/.test(st) || st === 'ok' || st === 'presenca' || st === 'presente';
   };
 
   const isFemaleName = (name: string) => {
@@ -111,7 +113,9 @@ export default function TeamSchedulePage() {
   };
 
   const preencherConfirmados = () => {
+    console.log('Iniciando preenchimento de confirmados...');
     const linhas = listaParticipantes.split('\n').filter(l => l.trim());
+    console.log(`Total de linhas: ${linhas.length}`);
     const confirmados: string[] = [];
 
     linhas.forEach(linha => {
@@ -120,10 +124,14 @@ export default function TeamSchedulePage() {
       const nome = parts[0];
       const status = parts.slice(1).join('-');
       
+      console.log(`Processando: ${nome} - Status: ${status} - É confirmado? ${isConfirmado(status)}`);
+      
       if (isConfirmado(status) && !coordenadores.some(c => normalizeStr(c) === normalizeStr(nome))) {
         confirmados.push(nome);
       }
     });
+    
+    console.log('Confirmados encontrados:', confirmados);
 
     const usados = new Set<string>();
     const novoCampos = { ...campos };
@@ -171,6 +179,8 @@ export default function TeamSchedulePage() {
     [0, 4, 6, 7, 9, 10, 11, 12, 13].forEach(idx => {
       novoCampos[`campo${idx}`] = pegarNomePreferencial([masculinos, femininos]);
     });
+    
+    console.log('Campos preenchidos:', novoCampos);
 
     setCampos(novoCampos);
   };
