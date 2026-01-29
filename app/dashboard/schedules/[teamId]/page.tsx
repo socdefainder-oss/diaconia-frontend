@@ -38,10 +38,31 @@ export default function TeamSchedulePage() {
     'Corredor 3 - Entrada secundária da área Reservada', 'Lateral Bateria:'];
 
   const posicoesTexto = [
-    [85, 205], [85, 335], [70, 450], [175, 135], [110, 350],
-    [150, 220], [155, 240], [150, 265], [160, 285], [165, 305], [170, 325], [175, 345], [180, 365], [185, 385],
-    [235, 75], [235, 95], [235, 115], [340, 145], [340, 165],
-    [415, 335], [420, 200], [420, 220], [50, 560], [50, 580], [235, 135]
+    [15, 25],    // 0: Porta 1 (canto superior esquerdo)
+    [85, 335],   // 1: Lateral Camarim (título)
+    [35, 15],    // 2: Escada (canto superior esquerdo, segunda bolinha)
+    [240, 155],  // 3: Aux Pastores (área central superior, perto da Viviana)
+    [145, 25],   // 4: Unifila lado Camarim (topo centro-esquerda)
+    [150, 220],  // 5: Corredor 1 (título vermelho)
+    [125, 685],  // 6: Corredor 2 (embaixo esquerda)
+    [150, 265],  // 7: Corredor 3 (título vermelho)
+    [20, 685],   // 8: Corredor 4 (embaixo, primeira bolinha esquerda)
+    [160, 440],  // 9: Corredor 5 (meio, lado esquerdo)
+    [255, 685],  // 10: Corredor 6 (embaixo centro)
+    [160, 340],  // 11: Corredor 7 (meio-esquerda, área central)
+    [380, 685],  // 12: Corredor 8 (embaixo centro-direita)
+    [490, 685],  // 13: Corredor 9 (embaixo, última bolinha direita)
+    [260, 60],   // 14: Recepcionista 1 (topo, área do Telão)
+    [260, 85],   // 15: Recepcionista 2 (topo, abaixo de Bella)
+    [260, 110],  // 16: Recepcionista 3 (topo, abaixo de Luciana)
+    [485, 380],  // 17: Controlador de Area (lado direito, meio)
+    [485, 410],  // 18: Staff (lado direito, abaixo do controlador)
+    [415, 335],  // 19: Lateral Bateria (título)
+    [505, 25],   // 20: Porta Emergencia (canto superior direito)
+    [385, 210],  // 21: Auxiliar (lado direito superior, próximo de Joana)
+    [50, 560],   // 22: Hora de Chegada (campo de texto)
+    [50, 580],   // 23: Uniforme (campo de texto)
+    [260, 135]   // 24: Recepcionista 4 (topo, abaixo de Patricia)
   ];
 
   const coordenadores = ['Ivan', 'Renata', 'Wellington', 'Fernanda', 'Éverton', 'Liliane'];
