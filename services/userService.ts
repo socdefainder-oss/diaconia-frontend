@@ -32,7 +32,7 @@ export const userService = {
   },
 
   async resetPassword(id: string, newPassword: string): Promise<void> {
-    await api.patch(`/users/${id}/password`, { password: newPassword });
+    await api.post(`/users/${id}/reset-password`, { password: newPassword });
   },
 
   async getDashboardStats(): Promise<any> {
