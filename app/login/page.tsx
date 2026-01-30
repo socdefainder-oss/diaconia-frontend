@@ -18,13 +18,24 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      const { user, token } = await authService.login(email, password);
-      localStorage.setItem('token', token);
-      localStorage.setItem('user', JSON.stringify(user));
-      toast.success(`Bem-vindo, ${user.name}!`);
+      console.log('Tentando fazer login...');
+      const response = await authService.login(email, password);
+      console.log('Resposta do login:', response);
+      
+      if (!response || !response.token || !response.user) {
+        console.error('Resposta inválida:', response);
+        toast.error('Erro: resposta inválida do servidor');
+        return;
+      }
+      
+      localStorage.setItem('token', response.token);
+      localStorage.setItem('user', JSON.stringify(response.user));
+      toast.success(`Bem-vindo, ${response.user.name}!`);
       router.push('/dashboard');
     } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Erro ao fazer login');
+      console.error('Erro no login:', error);
+      const errorMessage = error.response?.data?.message || error.message || 'Erro ao fazer login';
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
