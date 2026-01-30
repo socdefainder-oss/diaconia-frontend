@@ -32,7 +32,25 @@ export const userService = {
   },
 
   async resetPassword(id: string, newPassword: string): Promise<void> {
-    await api.post(`/users/${id}/reset-password`, { password: newPassword });
+    // Tenta múltiplas rotas possíveis
+    try {
+      await api.put(`/users/${id}`, { password: newPassword });
+    } catch (error: any) {
+      if (error.response?.status === 404) {
+        // Se PUT /users/:id falhar, tenta outras rotas
+        try {
+          await api.patch(`/users/${id}`, { password: newPassword });
+        } catch (err2: any) {
+          if (err2.response?.status === 404) {
+            await api.post(`/auth/reset-password/${id}`, { password: newPassword });
+          } else {
+            throw err2;
+          }
+        }
+      } else {
+        throw error;
+      }
+    }
   },
 
   async getDashboardStats(): Promise<any> {
